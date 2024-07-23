@@ -23,6 +23,7 @@ class HashMap {
   set(key, value) {
     let bucket = this.buckets[this.hash(key)];
     let index = bucket.map(obj => obj.key).indexOf(key);
+
     if (index !== -1) {
       bucket[index].value = value;
     } else {
@@ -31,16 +32,45 @@ class HashMap {
   }
 
   // takes one argument as a key and returns the value that is assigned to this key. If a key is not found, return null.
-  get(key) {}
+  get(key) {
+    let bucket = this.buckets[this.hash(key)];
+    let index = bucket.map(obj => obj.key).indexOf(key);
+
+    if (index !== -1) {
+      return bucket[index].value;
+    }
+
+    return null;
+  }
 
   // takes a key as an argument and returns true or false based on whether or not the key is in the hash map.
-  has(key) {}
+  has(key) {
+    let bucket = this.buckets[this.hash(key)];
+    return bucket.map(obj => obj.key).includes(key);
+  }
 
-  // takes a key as an argument. If the given key is in the hash map, it should remove the entry with that key and return true. If the key isn’t in the hash map, it should return false.
-  remove(key) {}
+  // takes a key as an argument. If the given key is in the hash map, it should remove the entry with that key and
+  // return true.If the key isn’t in the hash map, it should return false.
+  remove(key) {
+    let bucket = this.buckets[this.hash(key)];
+    let index = bucket.map(obj => obj.key).indexOf(key);
+
+    if (index !== -1) {
+      bucket.splice(index, 1);
+      return true;
+    }
+
+    return false;
+  }
 
   // returns the number of stored keys in the hash map.
-  length() {}
+  length() {
+    let count = 0;
+    for (let arr of this.buckets) {
+      count += arr.length;
+    }
+    return count;
+  }
 
   // removes all entries in the hash map.
   clear() {}
@@ -69,7 +99,10 @@ test.set('jacket', 'blue');
 test.set('kite', 'pink');
 test.set('lion', 'golden');
 
-console.log(JSON.stringify(test));
+// console.log(JSON.stringify(test));
 
-test.set('hat', 'yellow');
-console.log(JSON.stringify(test));
+// test.set('hat', 'yellow');
+// console.log(JSON.stringify(test));
+
+console.log(test.length());
+// console.log(JSON.stringify(test));
