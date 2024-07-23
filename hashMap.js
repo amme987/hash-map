@@ -23,7 +23,7 @@ class HashMap {
   set(key, value) {
     let bucket = this.buckets[this.hash(key)];
     let index = bucket.map(obj => obj.key).indexOf(key);
-
+    console.log(this.hash(key));
     if (index !== -1) {
       bucket[index].value = value;
     } else {
@@ -73,16 +73,42 @@ class HashMap {
   }
 
   // removes all entries in the hash map.
-  clear() {}
+  clear() {
+    this.buckets = Array.from({ length: 16 }, () => []);
+  }
 
   // returns an array containing all the keys inside the hash map.
-  keys() {}
+  keys() {
+    let keys = [];
+    for (let i of this.buckets) {
+      for (let j of i) {
+        keys.push(j.key);
+      }
+    }
+    return keys;
+  }
 
   // returns an array containing all the values.
-  values() {}
+  values() {
+    let values = [];
+    for (let i of this.buckets) {
+      for (let j of i) {
+        values.push(j.value);
+      }
+    }
+    return values;
+  }
 
   // returns an array that contains each key, value pair.
-  entries() {}
+  entries() {
+    let entries = [];
+    for (let i of this.buckets) {
+      for (let j of i) {
+        entries.push([j.key, j.value]);
+      }
+    }
+    return entries;
+  }
 }
 
 const test = new HashMap();
@@ -104,5 +130,9 @@ test.set('lion', 'golden');
 // test.set('hat', 'yellow');
 // console.log(JSON.stringify(test));
 
-console.log(test.length());
+// console.log(test.length());
+console.log(JSON.stringify(test));
+
+console.log(test.entries());
+// console.log(test);
 // console.log(JSON.stringify(test));
