@@ -1,10 +1,8 @@
-class HashMap {
+export class HashMap {
   capacity = 16;
   loadFactor = 0.75;
 
   constructor() {
-    // this.key = key;
-    // this.value = value;
     this.buckets = Array.from({ length: this.capacity }, () => []);
   }
 
@@ -22,7 +20,6 @@ class HashMap {
   set(key, value) {
     let bucket = this.buckets[this.hash(key)];
     let index = bucket.map(obj => obj.key).indexOf(key);
-    console.log(this.hash(key));
     if (index !== -1) {
       bucket[index].value = value;
     } else {
@@ -46,7 +43,6 @@ class HashMap {
 
   // takes one argument as a key and returns the value that is assigned to this key. If a key is not found, return null.
   get(key) {
-    console.log(`this: ${this}`);
     let bucket = this.buckets[this.hash(key)];
     let index = bucket.map(obj => obj.key).indexOf(key);
 
@@ -88,6 +84,7 @@ class HashMap {
 
   // removes all entries in the hash map.
   clear() {
+    this.capacity = 16;
     this.buckets = Array.from({ length: this.capacity }, () => []);
   }
 
@@ -124,32 +121,3 @@ class HashMap {
     return entries;
   }
 }
-
-const test = new HashMap();
-test.set('apple', 'red');
-test.set('banana', 'yellow');
-test.set('carrot', 'orange');
-test.set('dog', 'brown');
-test.set('elephant', 'gray');
-test.set('frog', 'green');
-test.set('grape', 'purple');
-test.set('hat', 'black');
-test.set('ice cream', 'white');
-test.set('jacket', 'blue');
-test.set('kite', 'pink');
-test.set('lion', 'golden');
-
-// console.log(JSON.stringify(test));
-
-// test.set('hat', 'yellow');
-// console.log(JSON.stringify(test));
-
-// console.log(test.length());
-console.log(JSON.stringify(test));
-
-test.set('moon', 'silver');
-console.log(JSON.stringify(test));
-// console.log(test);
-// console.log(JSON.stringify(test));
-
-// TODO: load and capacity factors
