@@ -1,11 +1,11 @@
 class HashMap {
-  capacity;
-  loadFactor;
+  capacity = 16;
+  loadFactor = 0.75;
 
   constructor() {
     // this.key = key;
     // this.value = value;
-    this.buckets = Array.from({ length: 16 }, () => []);
+    this.buckets = Array.from({ length: this.capacity }, () => []);
   }
 
   // takes a key and produces a hash code with it.
@@ -16,8 +16,7 @@ class HashMap {
     for (let i = 0; i < key.length; i++) {
       hashCode = primeNumber * hashCode + key.charCodeAt(i);
     }
-
-    return hashCode % this.buckets.length;
+    return hashCode % this.capacity;
   }
 
   set(key, value) {
@@ -28,11 +27,26 @@ class HashMap {
       bucket[index].value = value;
     } else {
       bucket.push({ key, value });
+
+      // If stored keys > capacity * load this.loadFactor, grow buckets size and rehash table
+      if (this.length() > this.capacity * this.loadFactor) {
+        this.capacity *= 2;
+
+        let entries = this.entries();
+        let newBuckets = Array.from({ length: this.capacity }, () => []);
+
+        entries.forEach(obj => {
+          [key, value] = obj;
+          newBuckets[this.hash(key)].push({ key, value });
+        });
+        this.buckets = newBuckets;
+      }
     }
   }
 
   // takes one argument as a key and returns the value that is assigned to this key. If a key is not found, return null.
   get(key) {
+    console.log(`this: ${this}`);
     let bucket = this.buckets[this.hash(key)];
     let index = bucket.map(obj => obj.key).indexOf(key);
 
@@ -74,7 +88,7 @@ class HashMap {
 
   // removes all entries in the hash map.
   clear() {
-    this.buckets = Array.from({ length: 16 }, () => []);
+    this.buckets = Array.from({ length: this.capacity }, () => []);
   }
 
   // returns an array containing all the keys inside the hash map.
@@ -133,6 +147,9 @@ test.set('lion', 'golden');
 // console.log(test.length());
 console.log(JSON.stringify(test));
 
-console.log(test.entries());
+test.set('moon', 'silver');
+console.log(JSON.stringify(test));
 // console.log(test);
 // console.log(JSON.stringify(test));
+
+// TODO: load and capacity factors
